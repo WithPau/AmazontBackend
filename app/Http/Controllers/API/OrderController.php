@@ -23,9 +23,9 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'items' => 'required|array',
-            'items.*.product_id' => 'required|exists:products,id_prod',
+            'items.*.product_id' => 'required|exists:productos,id_prod',
             'items.*.quantity' => 'required|integer|min:1',
-            'payment_method_id' => 'nullable|exists:payment_methods,id',
+            'payment_method_id' => 'nullable|exists:metodo_pago,id',
         ]);
 
         if ($validator->fails()) {
@@ -52,19 +52,19 @@ class OrderController extends Controller
             $order = Order::create([
                 'user_id' => $user->id,
                 'total' => $total,
-                'payment_method_id' => $request->payment_method_id,
+                'metodo_pago_id' => $request->payment_method_id,
             ]);
 
             // Create order items
             foreach ($request->items as $item) {
                 $product = Product::findOrFail($item['product_id']);
-                $price = $product->on_sale ? $product->sale_price : $product->price;
+                $price = $product->rebajas ? $product->precio_rebajado : $product->precio;
                 
                 OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $price,
+                    'pedido_id' => $order->id,
+                    'producto_id' => $item['product_id'],
+                    'cantidad' => $item['quantity'],
+                    'precio' => $price,
                 ]);
                 
                 // Update stock

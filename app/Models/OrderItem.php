@@ -10,15 +10,22 @@ class OrderItem extends Model
     use HasFactory;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'pedir_productos';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'order_id',
-        'product_id',
-        'quantity',
-        'price',
+        'pedido_id',
+        'producto_id',
+        'cantidad',
+        'precio',
     ];
 
     /**
@@ -26,7 +33,7 @@ class OrderItem extends Model
      */
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'pedido_id');
     }
 
     /**
@@ -34,6 +41,6 @@ class OrderItem extends Model
      */
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id_prod');
+        return $this->belongsTo(Product::class, 'producto_id', 'id_prod');
     }
 }

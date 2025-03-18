@@ -10,6 +10,13 @@ class Order extends Model
     use HasFactory;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'pedidos';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -17,8 +24,8 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'total',
-        'status',
-        'payment_method_id',
+        'estado',
+        'metodo_pago_id',
     ];
 
     /**
@@ -34,7 +41,7 @@ class Order extends Model
      */
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class, 'pedido_id');
     }
 
     /**
@@ -42,6 +49,6 @@ class Order extends Model
      */
     public function paymentMethod()
     {
-        return $this->belongsTo(PaymentMethod::class);
+        return $this->belongsTo(PaymentMethod::class, 'metodo_pago_id');
     }
 }
